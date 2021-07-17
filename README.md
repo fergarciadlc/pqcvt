@@ -4,9 +4,10 @@ A simple CLI to covert parquet, csv and excel files.
 
 # Installation
 
-To install the cli run:
+To install the cli run in yor main or venv:
 
 ```bash
+pip install --upgrade pip
 pip install git+https://git@github.com/fergarciadlc/pqcvt.git
 ```
 
