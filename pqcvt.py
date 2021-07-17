@@ -11,7 +11,7 @@ READ_FUNCTION_BY_FORMAT = {
 
 WRITE_FUNCTION_BY_FORMAT = {
     "csv":      lambda df, x: df.to_csv(x, index=False),
-    "parquet":  lambda df, x: df.to_parquet(x, index=True, engine="pyarrow"),
+    "parquet":  lambda df, x: df.to_parquet(x, index=False, engine="pyarrow"),
     "excel":    lambda df, x: df.to_excel(x, index=False),
 }
 
