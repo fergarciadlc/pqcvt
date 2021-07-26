@@ -1,7 +1,7 @@
 import click
 import pandas as pd
 
-FILE_FORMATS = ["csv", "excel", "parquet"]
+FILE_FORMATS = ["csv", "excel", "parquet", "xlsx"]
 
 READ_FUNCTION_BY_FORMAT = {
     "csv": lambda x: pd.read_csv(x),
@@ -43,7 +43,8 @@ def cli(inputfile, format_, output, force_str):
 
     input_format = inputfile.split(".")[-1]
 
-    df = READ_FUNCTION_BY_FORMAT[input_format](inputfile)
+
+    df = READ_FUNCTION_BY_FORMAT[input_format.replace("xlsx", "excel")](inputfile)
 
     if force_str:
         df = df.astype(str)
