@@ -1,12 +1,12 @@
 import click
 import pandas as pd
 
-FILE_FORMATS = ["csv", "excel", "parquet"]
+FILE_FORMATS = ["csv", "xlsx", "parquet"]
 
 READ_FUNCTION_BY_FORMAT = {
-    "csv": lambda x: pd.read_csv(x),
-    "parquet": lambda x: pd.read_parquet(x),
-    "excel": lambda x: pd.read_excel(x),
+    "csv": pd.read_csv,
+    "parquet": pd.read_parquet,
+    "xlsx": pd.read_excel,
 }
 
 WRITE_FUNCTION_BY_FORMAT = {
@@ -14,7 +14,7 @@ WRITE_FUNCTION_BY_FORMAT = {
     "parquet": lambda df, x: df.to_parquet(
         x, index=False, engine="pyarrow", use_deprecated_int96_timestamps=True
     ),
-    "excel": lambda df, x: df.to_excel(x, index=False),
+    "xlsx": lambda df, x: df.to_excel(x, index=False),
 }
 
 
@@ -43,20 +43,18 @@ def cli(inputfile, format_, output, force_str):
 
     input_format = inputfile.split(".")[-1]
 
-    df = READ_FUNCTION_BY_FORMAT[input_format](inputfile)
-
     if force_str:
+        kwargs = {"dtype": str} if input_format == "csv" else {}
+        df = READ_FUNCTION_BY_FORMAT[input_format](inputfile, **kwargs)
         df = df.astype(str)
-
-    if output:
-        WRITE_FUNCTION_BY_FORMAT[format_](df, output)
     else:
-        output = inputfile.replace(input_format, format_)
-        if format_ == "excel":
-            output = output.replace(".excel", ".xlsx")
-        WRITE_FUNCTION_BY_FORMAT[format_](df, output)
+        df = READ_FUNCTION_BY_FORMAT[input_format](inputfile)
 
-    click.echo(f"File saved: {output}")
+    output_filename = inputfile.replace(input_format, format_) if not output else output
+
+    WRITE_FUNCTION_BY_FORMAT[format_](df, output_filename)
+
+    click.echo(f"File saved: {output_filename}")
 
 
 if __name__ == "__main__":

@@ -14,10 +14,10 @@ pip install git+https://git@github.com/fergarciadlc/pqcvt.git
 # Usage
 ```
 >> pqcvt --help
-Usage: pqcvt [OPTIONS] INPUTFILE
+Usage: pqcvt [OPTIONS] INPUTFILE 
 
 Options:
-  -f, --format [csv|excel|parquet]
+  -f, --format [csv|xlsx|parquet]
                                   Format to convert the file.  [required]
   -o, --output TEXT               Output filename.
   --force-str                     Force string type in table.
